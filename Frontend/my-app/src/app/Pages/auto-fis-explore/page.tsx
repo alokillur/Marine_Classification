@@ -1,15 +1,12 @@
 "use client"
 import Link from "next/link";
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
-import LoadingBar from 'react-top-loading-bar'
-import { css } from '@emotion/react';
 import "./app.css";
 
 export default function ImageAnalyzerPage() {
   const [image, setImage] = useState<string | null>(null);
   const [prediction, setPrediction] = useState<string>("");
-  // const [progress, setProgress] = useState(0)
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const inputElement = event.target as HTMLInputElement;
@@ -29,26 +26,24 @@ export default function ImageAnalyzerPage() {
     setPrediction("");
   };
 
-  const handleSubmit = async () => {
-    if (!image) return;
-
-    const formData = new FormData();
-    formData.append("file", image);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
     try {
-      const response = await fetch("http://localhost:50603/predict", {
-        method: "POST",
-        body: formData,
-      });
+        const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+        });
 
-      if (response.ok) {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
         const data = await response.json();
         setPrediction(data.message);
-      } else {
-        console.error("Failed to get prediction");
-      }
     } catch (error) {
-      console.error("Error occurred while fetching prediction:", error);
+        console.error('Error:', error);
     }
   };
 
@@ -81,10 +76,7 @@ export default function ImageAnalyzerPage() {
               <div className="flex flex-col gap-2 ">
                 <form
                   id="uploadForm"
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    handleSubmit();
-                  }}
+                  onSubmit={handleSubmit}
                   encType="multipart/form-data"
                 >
                   <div className="bg-black border border-dashed rounded-lg w-full p-6 flex flex-col items-center gap-2 border-gray-200 shadow-sm transition-colors hover:border-gray-300 focus-within:outline-none focus-within:border-gray-300 dark:border-gray-800 dark:border-gray-800">
@@ -126,7 +118,6 @@ export default function ImageAnalyzerPage() {
                     <Button type="submit" 
                     className="flex items-center  text-white w-32"
                     variant="outline"
-                    onClick={handleSubmit}
                       >
                       Submit
                     </Button>

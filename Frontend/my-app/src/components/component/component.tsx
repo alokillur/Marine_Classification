@@ -3,11 +3,13 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Navbar from "./navbar";
+import "./app.css"
 
 export function Component() {
   return (
     <>
       <Navbar />
+      <video src={BgVideo} autoPlay muted loop class="video-bg" />
       <div className="py-12 lg:py-16 bg-black">
         <div className="container mx-auto grid items-center justify-center gap-4 px-4 text-center md:px-6">
           <div className="space-y-3">
@@ -39,7 +41,7 @@ export function Component() {
                 Explore the incredible variety of marine fish species, from
                 colorful reef dwellers to majestic pelagic swimmers.
               </p>
-              <Link href="/Pages/auto-fis-explore">
+              <Link href="/Pages/find-fish">
               <Button className="bg-white text-black inline-flex items-center justify-center h-10 px-8 rounded-md border border-gray-200 shadow-sm gap-2 transition-colors hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300">
                 Get Started
               </Button>
